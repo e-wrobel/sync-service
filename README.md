@@ -43,6 +43,23 @@ Also remove files missing in source:
 - Only regular files are synchronized. Non-regular entries are logged and skipped.
 - Overwrites are **atomic**: data is written to a temporary file and then `os.Rename` replaces the target.
 
+## Data integrity and atomic operations
+The synchronization process uses safe write operations to ensure data integrity. 
+Files are first copied to a temporary file and only then atomically renamed to the target location. 
+This approach prevents corruption from partial writes during the copy process. 
+Additionally, modification times are preserved using `os.Chtimes`, which allows for accurate comparison of file timestamps 
+during subsequent runs. This method avoids race conditions and inconsistent states if the program crashes mid-copy. 
+As a result, this design makes the tool robust and reliable for cron-based or automated runs.
+
+### Data flow diagram (Mermaid)
+
+```mermaid
+flowchart LR
+  A[Source file] --> B[Copy to temp file (.tmp~)]
+  B --> C[Preserve mod-time (os.Chtimes)]
+  C --> D[Atomic rename temp -> destination]
+  D --> E[Target file updated safely]
+```
 ## Tests
 ```bash
   go test ./...
