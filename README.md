@@ -1,4 +1,4 @@
-# filesync – one-shot folder synchronization (source → target)
+# Sync-Service – one-shot folder synchronization (source → target)
 
 CLI tool written in Go. On startup it compares *source* and *target* folders and:
 
@@ -12,9 +12,9 @@ Errors are logged, but do **not** stop the run.
 - Go 1.18+
 - Works on Linux/macOS/Windows (uses only Go stdlib)
 
-## Build
+## Manual build
 ```bash
-g o build -o sync-service ./cmd/sync
+  go build -o sync-service ./cmd/sync
 ```
 
 ## Usage
@@ -62,27 +62,18 @@ Also remove files missing in source:
 | mod     | Tidy and verify Go modules                          |
 | graph   | Generate dependency graph                           |
 
-### Examples
-
-Build the binary:
-```bash
-make build
-```
-
-Run the binary with CLI arguments:
-```bash
-make run ARGS="--source ./example/src --target ./example/dst --delete-missing"
-```
-
 ## Quick demo (with included example folders)
+Remark: First we need to build the binary.
 
 After building the binary, try syncing the included example folders:
 
+### Run sync without deleting extra files
 ```bash
-# Run sync without deleting extra files
   ./sync-service --source ./example/src --target ./example/dst
+```
 
-# Run sync and also delete files missing in source
+### Run sync and also delete files missing in source
+```bash
   ./sync-service --source ./example/src --target ./example/dst --delete-missing
 ```
 
@@ -96,3 +87,34 @@ After first run (without --delete-missing):
 
 After run with --delete-missing:
 - `old.txt` is removed from `dst/`
+
+## Scheduling with cron (user mode)
+
+To run sync-service automatically every 10 minutes using cron, follow these steps:
+
+1. Build the binary (if not already built):
+```bash
+  go build -o sync-service ./cmd/sync
+```
+
+2. Edit your crontab file by running:
+```bash
+  crontab -e
+```
+
+3. Add the following line to schedule the sync every 10 minutes:
+```
+*/10 * * * * /usr/local/bin/sync-service --source /home/marcin/data/src --target /home/marcin/data/dst >> /home/marcin/sync-service/sync.log 2>&1
+```
+
+Explanation of the cron line:
+- `*/10 * * * *` — runs the command every 10 minutes.
+- `/usr/local/bin/sync-service` — the full path to the sync-service binary.
+- `--source /home/marcin/data/src` — specifies the source directory.
+- `--target /home/marcin/data/dst` — specifies the target directory.
+- `>> /home/marcin/sync-service/sync.log 2>&1` — appends both standard output and error output to the `sync.log` file for logging.
+
+If you want the sync to also delete files missing in the source directory, add the `--delete-missing` flag to the command:
+```
+*/10 * * * * /user/local/bin/sync-service --source /home/marcin/data/src --target /home/marcin/data/dst --delete-missing >> /home/marcin/sync-service/sync.log 2>&1
+```

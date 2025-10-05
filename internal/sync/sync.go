@@ -25,7 +25,7 @@ func Sync(opt Options) *Report {
 
 	err := filepath.WalkDir(opt.Source, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
-			opt.Logger.Printf("ERR: odczyt %s: %v", path, err)
+			opt.Logger.Printf("ERR: read %s: %v", path, err)
 			rep.addErr(err)
 			return nil
 		}
@@ -50,7 +50,7 @@ func Sync(opt Options) *Report {
 			return nil
 		}
 		if !info.Mode().IsRegular() {
-			opt.Logger.Printf("SKIP: nieregularny plik %s (mode=%v)", path, info.Mode())
+			opt.Logger.Printf("SKIP: not regular file %s (mode=%v)", path, info.Mode())
 			rep.Skipped++
 			return nil
 		}
@@ -94,7 +94,7 @@ func Sync(opt Options) *Report {
 	if opt.DeleteMissing {
 		err = filepath.WalkDir(opt.Target, func(path string, d os.DirEntry, err error) error {
 			if err != nil {
-				opt.Logger.Printf("ERR: odczyt %s: %v", path, err)
+				opt.Logger.Printf("ERR: read %s: %v", path, err)
 				rep.addErr(err)
 				return nil
 			}
