@@ -118,3 +118,7 @@ If you want the sync to also delete files missing in the source directory, add t
 ```
 */10 * * * * /user/local/bin/sync-service --source /home/marcin/data/src --target /home/marcin/data/dst --delete-missing >> /home/marcin/sync-service/sync.log 2>&1
 ```
+
+## Debugging and troubleshooting
+You can run application in debug mode in Goland.
+Configuration is provided in `.run` directory.

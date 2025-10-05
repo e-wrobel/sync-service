@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
+    <module name="sync-service" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="--source ./example/src --target ./example/dst --delete-missing" />
+    <kind value="FILE" />
+    <package value="github.com/e-wrobel/sync-service" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/cmd/service/main.go" />
+    <method v="2" />
+  </configuration>
+</component>
