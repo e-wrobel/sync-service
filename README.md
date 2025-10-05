@@ -55,10 +55,11 @@ As a result, this design makes the tool robust and reliable for cron-based or au
 
 ```mermaid
 flowchart LR
-  A[Source file] --> B[Copy to temp file (.tmp~)]
-  B --> C[Preserve mod-time (os.Chtimes)]
-  C --> D[Atomic rename temp -> destination]
-  D --> E[Target file updated safely]
+    A["Source file"] --> B["Copy to temp file (.tmp~)"]
+    B --> C["Preserve mod-time (os.Chtimes)"]
+    C --> D["Atomic rename temp to destination"]
+    D --> E["Target file updated safely"]
+
 ```
 ## Tests
 ```bash
